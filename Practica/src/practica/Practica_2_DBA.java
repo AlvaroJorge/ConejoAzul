@@ -23,6 +23,7 @@ public class Practica_2_DBA {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        //HOLA
         // TODO code application logic here
         SingleAgent vehiculo;
         SingleAgent reconocimiento;
