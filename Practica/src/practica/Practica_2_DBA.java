@@ -23,19 +23,19 @@ public class Practica_2_DBA {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        //HOLA
         // TODO code application logic here
         SingleAgent vehiculo;
         SingleAgent reconocimiento;
         SingleAgent repostaje;
-        AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
+        //AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
+        AgentsConnection.connect("localhost",5672,"test","guest","guest",false);
         vehiculo = new Vehiculo(new AgentID("vehiculo"));
-        reconocimiento = new Reconocimiento(new AgentID("reconocimineto"));
-        repostaje = new Repostaje(new AgentID("repostaje"));
+        //reconocimiento = new Reconocimiento(new AgentID("reconocimineto"));
+        //repostaje = new Repostaje(new AgentID("repostaje"));
         System.out.println("\n");
         vehiculo.start();
-        repostaje.start();
-        reconocimiento.start();
+        //repostaje.start();
+        //reconocimiento.start();
     }
     
 }

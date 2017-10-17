@@ -16,9 +16,18 @@ import org.codehaus.jettison.json.JSONObject;
 public class Vehiculo extends SingleAgent{
     
     private int mapa;
+    private JSONObject conexion;
     
     public Vehiculo(AgentID aid) throws Exception {
         super(aid);
+        conexion = new JSONObject();
+        conexion.put("command","login");
+        conexion.put("world","mundo1");
+        conexion.put("radar","reconocimiento");
+        conexion.put("scanner","reconocimiento");
+        conexion.put("battery","repostaje");
+        conexion.put("gps","reconocimiento");
+        System.out.println(conexion.get("command"));
     }
     
     public void mover(JSONObject movimiento){
@@ -48,7 +57,7 @@ public class Vehiculo extends SingleAgent{
     
     @Override
     public void finalize(){
-        
+        System.out.println("Vehiculo terminado");
     }
     
 }
