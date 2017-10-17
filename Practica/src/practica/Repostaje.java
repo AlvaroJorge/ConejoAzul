@@ -32,4 +32,8 @@ public class Repostaje extends SingleAgent{
         
     }
     
+    @Override
+    public void execute(){
+        
+    }
 }

@@ -7,6 +7,7 @@ package practica;
 
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -20,7 +21,7 @@ public class Vehiculo extends SingleAgent{
         super(aid);
     }
     
-    public void mover(){
+    public void mover(JSONObject movimiento){
     }
     
     public void conexion(){
@@ -32,6 +33,21 @@ public class Vehiculo extends SingleAgent{
     }
     
     public void solicitar_movimiento(){
+        
+    }
+    
+    @Override
+    public void init(){
+        
+    }
+    
+    @Override
+    public void execute(){
+        
+    }
+    
+    @Override
+    public void finalize(){
         
     }
     
