@@ -27,7 +27,7 @@ public class Practica_2_DBA {
         SingleAgent vehiculo;
         SingleAgent reconocimiento;
         SingleAgent repostaje;
-        //AgentsConnection.connect("isg2.ugr.es",6000,"test","guest","guest",false);
+        AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
         vehiculo = new Vehiculo(new AgentID("vehiculo"));
         reconocimiento = new Reconocimiento(new AgentID("reconocimineto"));
         repostaje = new Repostaje(new AgentID("repostaje"));
