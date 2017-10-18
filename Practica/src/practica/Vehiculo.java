@@ -117,27 +117,33 @@ public class Vehiculo extends SingleAgent{
                     else if(!recepcion_plano.equals("OK")){
                         System.out.println(recepcion_plano);
                         //FINALIZAR AGENTES
-                    }else{
-                        //OK
+                        finalize();
                     }
                 }
             }else{
-                //FINALIZAR AGENTE
+                finalize();
             }
         }else if(mensajero.equals("repostaje")){
+            
             recepcion_plano = recepcion.toString();
             if(recepcion_plano.equals("Repostar")){
                 repostaje = true;
-                //Enviar al servidor el mensaje de recarga de batería
+                envio = new JSONObject();
+                envio.put("command","refuel");
+                envio.put("key",key);
+                enviar_mensaje("Achernar",envio.toString());
             }
         }else if(mensajero.equals("reconocimiento")){
-            if(repostaje = true)
-                repostaje = false;
-            else{
+            if(!repostaje) {
                 //Comprobar el mensaje de movimiento de reconocimiento
                 recepcion_plano = recepcion.toString();
                 //Enviar el movimiento al servidor
-            }
+                envio = new JSONObject();
+                envio.put("command",recepcion_plano);
+                envio.put("key",key);
+                enviar_mensaje("Achernar",envio.toString());
+            } else //Si se acaba de repostar no hacemos nada
+                repostaje = false;
         }
     }
 }

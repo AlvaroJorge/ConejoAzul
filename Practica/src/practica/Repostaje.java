@@ -46,6 +46,8 @@ public class Repostaje extends SingleAgent{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
+        System.out.println("\nRepostaje: " + recepcion_plano + "Mensajero: " + mensajero);
+        //finalize();
         actuar(mensajero);
     }
     
@@ -54,7 +56,8 @@ public class Repostaje extends SingleAgent{
         while(true){
             try {
                 recibir_mensaje("Achernar");
-                recibir_mensaje("vehiculo");
+                //recibir_mensaje("vehiculo");
+                System.out.println("Hola");
             } catch (InterruptedException ex) {
                 Logger.getLogger(Repostaje.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
@@ -87,6 +90,9 @@ public class Repostaje extends SingleAgent{
                 else//mandar mensaje ok a vehiculo
                     enviar_mensaje("OK", "vehiculo");
             }
+        }else{
+            if(!recepcion_plano.equals("OK"))
+                finalize();
         }
     }
 }
