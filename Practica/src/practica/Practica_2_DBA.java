@@ -8,11 +8,6 @@ package practica;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.AgentsConnection;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import practica.Reconocimiento;
-import practica.Repostaje;
-import practica.Vehiculo;
-import static java.lang.Thread.sleep;
-
 /**
  *
  * @author alex
@@ -27,15 +22,14 @@ public class Practica_2_DBA {
         SingleAgent vehiculo;
         SingleAgent reconocimiento;
         SingleAgent repostaje;
-        //AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
-        AgentsConnection.connect("localhost",5672,"test","guest","guest",false);
+        AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
+
+        reconocimiento = new Reconocimiento(new AgentID("reconocimineto"));
+        repostaje = new Repostaje(new AgentID("repostaje"));
         vehiculo = new Vehiculo(new AgentID("vehiculo"));
-        //reconocimiento = new Reconocimiento(new AgentID("reconocimineto"));
-        //repostaje = new Repostaje(new AgentID("repostaje"));
-        System.out.println("\n");
         vehiculo.start();
-        //repostaje.start();
-        //reconocimiento.start();
+        repostaje.start(); 
+        reconocimiento.start();
     }
     
 }
