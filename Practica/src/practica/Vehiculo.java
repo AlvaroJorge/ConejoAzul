@@ -29,10 +29,8 @@ public class Vehiculo extends SingleAgent{
     
     public Vehiculo(AgentID aid) throws Exception {
         super(aid);
-        outbox = new ACLMessage();
-        outbox.setSender(aid);
-        inbox = new ACLMessage();
-        inbox.setReceiver(aid);
+        outbox = null;
+        inbox = null;
         
         repostaje=false;
         envio = new JSONObject();
@@ -48,6 +46,8 @@ public class Vehiculo extends SingleAgent{
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
+        outbox = new ACLMessage();
+        outbox.setSender(getAid());
         outbox.setReceiver(new AgentID(receptor));
         outbox.setContent(mensaje);
         this.send(outbox);
@@ -62,9 +62,10 @@ public class Vehiculo extends SingleAgent{
     }
     
     public void recibir_mensaje(String mensajero) throws InterruptedException, JSONException{
-        inbox.setSender(new AgentID(mensajero));
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
+        recepcion_plano = recepcion.toString();
+        System.out.println("Vehiculo: " + mensajero + ": " + recepcion_plano);
         actuar(mensajero);
     }
     
@@ -75,15 +76,15 @@ public class Vehiculo extends SingleAgent{
     
     @Override
     public void execute(){
+        boolean primero = true;
         while(true){
             try {
+                if(primero)
+                    recibir_mensaje("Achernar");
                 recibir_mensaje("Achernar");
                 recibir_mensaje("repostaje");
-                //Realmente llamariamos a recibir mensaje reconocimiento desde el metodo actuar de repostaje
-                //recibir_mensaje("reconocimiento");
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
+                primero = false;
+            } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -115,7 +116,6 @@ public class Vehiculo extends SingleAgent{
                             &&!recepcion_plano.equals("BAD_COMMAND")&&!recepcion_plano.equals("OK"))
                         key = recepcion.getString("result");    //Recibimos la key
                     else if(!recepcion_plano.equals("OK")){
-                        System.out.println(recepcion_plano);
                         //FINALIZAR AGENTES
                         finalize();
                     }
@@ -124,8 +124,7 @@ public class Vehiculo extends SingleAgent{
                 finalize();
             }
         }else if(mensajero.equals("repostaje")){
-            
-            recepcion_plano = recepcion.toString();
+            recepcion_plano = recepcion.getString("mensaje");
             if(recepcion_plano.equals("Repostar")){
                 repostaje = true;
                 envio = new JSONObject();
@@ -136,7 +135,7 @@ public class Vehiculo extends SingleAgent{
         }else if(mensajero.equals("reconocimiento")){
             if(!repostaje) {
                 //Comprobar el mensaje de movimiento de reconocimiento
-                recepcion_plano = recepcion.toString();
+                recepcion_plano = recepcion.getString("mensaje");
                 //Enviar el movimiento al servidor
                 envio = new JSONObject();
                 envio.put("command",recepcion_plano);

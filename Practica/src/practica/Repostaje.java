@@ -29,25 +29,23 @@ public class Repostaje extends SingleAgent{
     
     public Repostaje(AgentID aid) throws Exception {
         super(aid);
-        outbox = new ACLMessage();
-        outbox.setSender(aid);
-        inbox = new ACLMessage();
-        inbox.setReceiver(aid);   
+        outbox = null;
+        inbox = null;  
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
+        outbox = new ACLMessage();
+        outbox.setSender(getAid());
         outbox.setReceiver(new AgentID(receptor));
         outbox.setContent(mensaje);
         this.send(outbox);
     }
     
     public void recibir_mensaje(String mensajero) throws InterruptedException, JSONException{
-        inbox.setSender(new AgentID(mensajero));
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
-        System.out.println("\nRepostaje: " + recepcion_plano + "Mensajero: " + mensajero);
-        //finalize();
+        System.out.println("Repostaje: " + mensajero + ": " + recepcion_plano);
         actuar(mensajero);
     }
     
@@ -57,10 +55,7 @@ public class Repostaje extends SingleAgent{
             try {
                 recibir_mensaje("Achernar");
                 //recibir_mensaje("vehiculo");
-                System.out.println("Hola");
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Repostaje.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
+            } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Repostaje.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -79,16 +74,17 @@ public class Repostaje extends SingleAgent{
         
         if(mensajero.equals("Achernar")){
             if(recepcion_plano.equals("CRASHED")){
-                //Finalizar agente
                 finalize();
             }else if(recepcion.has("battery")){
                 //Actuar según niveles de batería
                 recepcion_plano = recepcion.getString("battery");
-                bateria = parseInt(recepcion_plano);
+                bateria = (int) Float.parseFloat(recepcion_plano);
+                envio = new JSONObject();
                 if(bateria <= 2)//mandar mensaje de repostaje a vehiculo
-                    enviar_mensaje("Repostar", "vehiculo");
+                    envio.put("mensaje","Repostaje");
                 else//mandar mensaje ok a vehiculo
-                    enviar_mensaje("OK", "vehiculo");
+                    envio.put("mensaje","OK");
+                enviar_mensaje(envio.toString(), "vehiculo");
             }
         }else{
             if(!recepcion_plano.equals("OK"))
