@@ -46,18 +46,28 @@ public class Reconocimiento extends SingleAgent{
     
     public void actualizar_Radar() throws JSONException{
         JSONArray rad = recepcion.getJSONArray("radar");
-        for(int i = 0; i < rad.length(); i+=5)
+        for(int i = 0, k=0; i < rad.length(); i+=5, k++)
             for(int j = 0; j < 5; j++)
                 radar[i/5][j] = rad.getInt(i+j);
-        System.out.println("Reconocimiento: actualizo radar");
+        
+        System.out.print("Reconocimiento: actualizo radar ");
+        for(int i = 0; i < rad.length(); i++)
+            for(int j = 0; j < 5; j++)
+                System.out.print(radar[i][j] + ", ");
+        System.out.print("\n");
     }
     
     public void actualizar_Scanner() throws JSONException{
         JSONArray scan = recepcion.getJSONArray("scanner");
-        for(int i = 0; i < scan.length(); i+=5)
+        for(int i = 0, k=0; i < scan.length(); i+=5, k++)
             for(int j = 0; j < 5; j++)
-                scanner[i/5][j] = scan.getInt(i+j);
-        System.out.println("Reconocimiento: actualizo scanner");
+                scanner[k][j] = scan.getInt(i+j);
+        
+        System.out.print("Reconocimiento: actualizo scanner ");
+        for(int i = 0; i < scan.length(); i++)
+            for(int j = 0; j < 5; j++)
+                System.out.print(scanner[i][j] + ", ");
+        System.out.print("\n");
     }
     
     public void enviar_movimiento(){
@@ -94,17 +104,17 @@ public class Reconocimiento extends SingleAgent{
         else if(recepcion.has("radar"))
             actualizar_Radar();
         recepcion_plano = recepcion.toString();
-        System.out.println("Reconocimiento: " + mensajero + ": " + recepcion_plano);
     }
     
     @Override
     public void execute(){
+        int contador = 0;
         while(true){
             try {
                 recibir_mensaje("Achernar");
-                recibir_mensaje("Achernar");
-                recibir_mensaje("Achernar");
-                actuar("Achernar");
+                if(contador % 3 == 0)
+                    actuar("Achernar");
+                contador++;
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Reconocimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -132,12 +142,7 @@ public class Reconocimiento extends SingleAgent{
                 //Finalizar agente
                 finalize();
             }else
-                /*envio = new JSONObject();
-                if(bateria <= 2)//mandar mensaje de repostaje a vehiculo
-                    envio.put("mensaje","Repostaje");
-                else//mandar mensaje ok a vehiculo
-                    envio.put("mensaje","OK");
-                enviar_mensaje(envio.toString(), "vehiculo");*/
+                // Pensamiento, ya se han actualizao las matrices y el gps
             System.out.println("Reconocimiento: " + recepcion_plano);
         }else
             if(!recepcion_plano.equals("OK"))

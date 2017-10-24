@@ -95,8 +95,8 @@ public class Vehiculo extends SingleAgent{
         try {
             envio = new JSONObject();
             try {
-            envio.put("command","logout");
-            envio.put("key",key);
+                envio.put("command","logout");
+                envio.put("key",key);
             } catch (JSONException ex) {
             Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
