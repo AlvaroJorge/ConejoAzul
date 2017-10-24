@@ -8,7 +8,6 @@ package practica;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import static java.lang.Integer.parseInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.codehaus.jettison.json.JSONException;
@@ -41,20 +40,19 @@ public class Repostaje extends SingleAgent{
         this.send(outbox);
     }
     
-    public void recibir_mensaje(String mensajero) throws InterruptedException, JSONException{
+    public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
-        System.out.println("Repostaje: " + mensajero + ": " + recepcion_plano);
-        actuar(mensajero);
+        System.out.println("Repostaje: " + recepcion_plano);
     }
     
     @Override
     public void execute(){
         while(true){
             try {
-                recibir_mensaje("Achernar");
-                //recibir_mensaje("vehiculo");
+                recibir_mensaje();
+                actuar();
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Repostaje.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -70,8 +68,8 @@ public class Repostaje extends SingleAgent{
         }
     }
     
-    public void actuar(String mensajero) throws JSONException{
-        
+    public void actuar() throws JSONException{
+        /*
         if(mensajero.equals("Achernar")){
             if(recepcion_plano.equals("CRASHED")){
                 finalize();
@@ -89,6 +87,6 @@ public class Repostaje extends SingleAgent{
         }else{
             if(!recepcion_plano.equals("OK"))
                 finalize();
-        }
+        }*/
     }
 }

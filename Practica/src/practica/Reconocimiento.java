@@ -94,27 +94,19 @@ public class Reconocimiento extends SingleAgent{
         this.send(outbox);
     }
     
-    public void recibir_mensaje(String mensajero) throws InterruptedException, JSONException{
+    public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
-        if(recepcion.has("scanner"))
-            actualizar_Scanner();
-        else if(recepcion.has("gps"))
-            actualizar_GPS();
-        else if(recepcion.has("radar"))
-            actualizar_Radar();
         recepcion_plano = recepcion.toString();
     }
     
     @Override
     public void execute(){
-        int contador = 0;
         while(true){
             try {
-                recibir_mensaje("Achernar");
-                if(contador % 3 == 0)
-                    actuar("Achernar");
-                contador++;
+                for(int i = 0; i < 3; i++)
+                    recibir_mensaje();
+                actuar();
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Reconocimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -134,9 +126,17 @@ public class Reconocimiento extends SingleAgent{
         System.out.println("Reconocimiento: vivo");
     }
     
-    public void actuar(String mensajero) throws JSONException{
+    public void actuar() throws JSONException{
         
-        if(mensajero.equals("Achernar")){
+        if(recepcion.has("scanner"))
+            actualizar_Scanner();
+        else if(recepcion.has("gps"))
+            actualizar_GPS();
+        else if(recepcion.has("radar"))
+            actualizar_Radar();
+        
+        
+/*        if(mensajero.equals("Achernar")){
             System.out.println("Reconocimiento: " + recepcion_plano);
             if(recepcion_plano.equals("CRASHED")){
                 //Finalizar agente
@@ -146,6 +146,6 @@ public class Reconocimiento extends SingleAgent{
             System.out.println("Reconocimiento: " + recepcion_plano);
         }else
             if(!recepcion_plano.equals("OK"))
-                finalize();
+                finalize();*/
     }
 }

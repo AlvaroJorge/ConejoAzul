@@ -66,12 +66,11 @@ public class Vehiculo extends SingleAgent{
         
     }
     
-    public void recibir_mensaje(String mensajero) throws InterruptedException, JSONException{
+    public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
-        System.out.println("Vehiculo: " + mensajero + ": " + recepcion_plano);
-        actuar(mensajero);
+        System.out.println("Vehiculo: " + recepcion_plano);
     }
     
     @Override
@@ -83,11 +82,8 @@ public class Vehiculo extends SingleAgent{
         boolean primero = true;
         while(true){
             try {
-                if(primero)
-                    recibir_mensaje("Achernar");
-                recibir_mensaje("Achernar");
-                recibir_mensaje("repostaje");
-                primero = false;
+                recibir_mensaje();
+                actuar();
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -111,8 +107,8 @@ public class Vehiculo extends SingleAgent{
         }
     }
     
-    public void actuar(String mensajero) throws JSONException, InterruptedException{
-        if(mensajero.equals("Achernar")){
+    public void actuar() throws JSONException, InterruptedException{
+        /*if(mensajero.equals("Achernar")){
             if(!recepcion.toString().equals("CRASHED")){
                 if(recepcion.has("result")){
                     recepcion_plano = recepcion.getString("result");
@@ -147,6 +143,6 @@ public class Vehiculo extends SingleAgent{
                 enviar_mensaje("Achernar",envio.toString());
             } else //Si se acaba de repostar no hacemos nada
                 repostaje = false;
-        }
+        }*/
     }
 }
