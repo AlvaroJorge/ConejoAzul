@@ -27,12 +27,19 @@ public class Vehiculo extends SingleAgent{
     private String recepcion_plano;
     private boolean repostaje;
     
-    public Vehiculo(AgentID aid) throws Exception {
+    public Vehiculo(AgentID aid) throws Exception{
         super(aid);
         outbox = null;
         inbox = null;
-        
         repostaje=false;
+        
+        conexion();   
+    }
+    
+    public void mover(JSONObject movimiento){
+    }
+    
+    public void conexion() throws JSONException{
         envio = new JSONObject();
         envio.put("command","login");
         envio.put("world","map1");
@@ -40,9 +47,7 @@ public class Vehiculo extends SingleAgent{
         envio.put("scanner","reconocimiento");
         envio.put("battery","repostaje");
         envio.put("gps","reconocimiento");
-    }
-    
-    public void mover(JSONObject movimiento){
+        enviar_mensaje(envio.toString(), "Achernar");
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -71,7 +76,6 @@ public class Vehiculo extends SingleAgent{
     
     @Override
     public void init(){
-        enviar_mensaje(envio.toString(), "Achernar");
     }
     
     @Override
