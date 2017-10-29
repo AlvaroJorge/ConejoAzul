@@ -28,9 +28,8 @@ public class Practica_2_DBA {
         reconocimiento = new Reconocimiento(new AgentID("reconocimiento"));
         repostaje = new Repostaje(new AgentID("repostaje"));
         vehiculo.start();
-        repostaje.start();
+        repostaje.start(); 
         reconocimiento.start();
     }
     
 }
-//PRUEBA2

@@ -26,12 +26,14 @@ public class Vehiculo extends SingleAgent{
     private String key;
     private String recepcion_plano;
     private boolean repostaje;
+    private boolean finalizar;
     
     public Vehiculo(AgentID aid) throws Exception{
         super(aid);
         outbox = null;
         inbox = null;
         repostaje=false;
+        finalizar = false;
         
         conexion();   
     }
@@ -58,19 +60,12 @@ public class Vehiculo extends SingleAgent{
         this.send(outbox);
     }
     
-    public void escuchar_Reconocimiento(){
-        
-    }
-    
-    public void solicitar_movimiento(){
-        
-    }
-    
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
         System.out.println("Vehiculo: " + recepcion_plano);
+        actuar();
     }
     
     @Override
@@ -80,10 +75,12 @@ public class Vehiculo extends SingleAgent{
     @Override
     public void execute(){
         boolean primero = true;
-        while(true){
+        while(true && !finalizar){
             try {
+                if(primero)
+                    recibir_mensaje();
                 recibir_mensaje();
-                actuar();
+                primero = false;
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -97,10 +94,14 @@ public class Vehiculo extends SingleAgent{
             try {
                 envio.put("command","logout");
                 envio.put("key",key);
+                enviar_mensaje(envio.toString(),"Achernar");
+                envio = new JSONObject();
+                envio.put("vehiculo","cerrar");
+                enviar_mensaje(envio.toString(),"Repostaje");
+                enviar_mensaje(envio.toString(),"Reconocimiento");
             } catch (JSONException ex) {
             Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
-            enviar_mensaje(envio.toString(),"Achernar");
             System.out.println("Vehiculo terminado");
         } finally {
             super.finalize();
@@ -108,22 +109,7 @@ public class Vehiculo extends SingleAgent{
     }
     
     public void actuar() throws JSONException, InterruptedException{
-        /*if(mensajero.equals("Achernar")){
-            if(!recepcion.toString().equals("CRASHED")){
-                if(recepcion.has("result")){
-                    recepcion_plano = recepcion.getString("result");
-                    if(!recepcion_plano.equals("BAD_MAP")&&!recepcion_plano.equals("BAD_PROTOCOL")&&!recepcion_plano.equals("BAD_KEY")
-                            &&!recepcion_plano.equals("BAD_COMMAND")&&!recepcion_plano.equals("OK"))
-                        key = recepcion.getString("result");    //Recibimos la key
-                    else if(!recepcion_plano.equals("OK")){
-                        //FINALIZAR AGENTES
-                        finalize();
-                    }
-                }
-            }else{
-                finalize();
-            }
-        }else if(mensajero.equals("repostaje")){
+        if(recepcion.has("repostaje")){
             recepcion_plano = recepcion.getString("mensaje");
             if(recepcion_plano.equals("Repostar")){
                 repostaje = true;
@@ -132,8 +118,10 @@ public class Vehiculo extends SingleAgent{
                 envio.put("key",key);
                 enviar_mensaje("Achernar",envio.toString());
             }
-        }else if(mensajero.equals("reconocimiento")){
-            if(!repostaje) {
+            else
+                finalizar = true;
+        }else if(recepcion.has("pensamiento")){
+            if(!repostaje){
                 //Comprobar el mensaje de movimiento de reconocimiento
                 recepcion_plano = recepcion.getString("mensaje");
                 //Enviar el movimiento al servidor
@@ -141,8 +129,20 @@ public class Vehiculo extends SingleAgent{
                 envio.put("command",recepcion_plano);
                 envio.put("key",key);
                 enviar_mensaje("Achernar",envio.toString());
-            } else //Si se acaba de repostar no hacemos nada
+            }else //Si se acaba de repostar no hacemos nada
                 repostaje = false;
-        }*/
+        }else{
+            if(!recepcion.toString().equals("CRASHED")){
+                if(recepcion.has("result")){
+                    recepcion_plano = recepcion.getString("result");
+                    if(!recepcion_plano.equals("BAD_MAP")&&!recepcion_plano.equals("BAD_PROTOCOL")&&!recepcion_plano.equals("BAD_KEY")
+                            &&!recepcion_plano.equals("BAD_COMMAND")&&!recepcion_plano.equals("OK"))
+                        key = recepcion.getString("result");    //Recibimos la key
+                    else if(!recepcion_plano.equals("OK"))
+                        finalizar = true;
+                }
+            }else
+                finalizar = true;
+        }
     }
 }

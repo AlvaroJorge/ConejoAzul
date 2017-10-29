@@ -23,18 +23,21 @@ public class Reconocimiento extends SingleAgent{
     
     private int posicion_x;
     private int posicion_y;
-    private int camino_recorrido[][] = new int[1000][1000];
+    private int camino_recorrido[][];
     private float scanner[][];
     private int radar[][];
     private JSONObject envio;
     private JSONObject recepcion;
     private ACLMessage outbox, inbox;
     private String recepcion_plano;
+    boolean finalizar;
     
     public Reconocimiento(AgentID aid) throws Exception {
         super(aid);
+        camino_recorrido = new int[1000][1000];
         radar = new int [5][5]; 
         scanner = new float[5][5];
+        finalizar = false;
     }
     
     public void actualizar_GPS() throws JSONException{
@@ -70,20 +73,8 @@ public class Reconocimiento extends SingleAgent{
         System.out.print("\n");
     }
     
-    public void enviar_movimiento(){
-        
-    }
-    
     public void actualizar_Matriz_AUX(){
         
-    }
-    
-    public void escuchar_Repostaje(){
-        
-    }
-    
-    public void escuchar_Vehiculo(){
-    
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -97,16 +88,26 @@ public class Reconocimiento extends SingleAgent{
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
+        if(recepcion.has("scanner"))
+            actualizar_Scanner();
+        else if(recepcion.has("gps"))
+            actualizar_GPS();
+        else if(recepcion.has("radar"))
+            actualizar_Radar();
         recepcion_plano = recepcion.toString();
     }
     
     @Override
     public void execute(){
-        while(true){
+        int contador = 0;
+        while(true && !finalizar){
             try {
-                for(int i = 0; i < 3; i++)
-                    recibir_mensaje();
-                actuar();
+                recibir_mensaje();
+                if(contador % 3 == 0){
+                    actualizar_Matriz_AUX();
+                    actuar();
+                }
+                contador++;
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Reconocimiento.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -128,24 +129,16 @@ public class Reconocimiento extends SingleAgent{
     
     public void actuar() throws JSONException{
         
-        if(recepcion.has("scanner"))
-            actualizar_Scanner();
-        else if(recepcion.has("gps"))
-            actualizar_GPS();
-        else if(recepcion.has("radar"))
-            actualizar_Radar();
-        
-        
-/*        if(mensajero.equals("Achernar")){
+        if(recepcion.has("vehiculo")){
+            if(recepcion.getString("vehiculo").equals("cerrar"))
+                finalizar = true;
+        }else{
             System.out.println("Reconocimiento: " + recepcion_plano);
             if(recepcion_plano.equals("CRASHED")){
-                //Finalizar agente
-                finalize();
-            }else
+                finalizar = true;
+            }else //IMPLEMENTAR
                 // Pensamiento, ya se han actualizao las matrices y el gps
             System.out.println("Reconocimiento: " + recepcion_plano);
-        }else
-            if(!recepcion_plano.equals("OK"))
-                finalize();*/
+        }
     }
 }
