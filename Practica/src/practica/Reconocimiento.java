@@ -49,7 +49,7 @@ public class Reconocimiento extends SingleAgent{
     
     public void actualizar_Radar() throws JSONException{
         JSONArray rad = recepcion.getJSONArray("radar");
-        for(int i = 0, k=0; i < rad.length(); i+=5, k++)
+        for(int i = 0; i < rad.length(); i+=5)
             for(int j = 0; j < 5; j++)
                 radar[i/5][j] = rad.getInt(i+j);
         
@@ -62,9 +62,9 @@ public class Reconocimiento extends SingleAgent{
     
     public void actualizar_Scanner() throws JSONException{
         JSONArray scan = recepcion.getJSONArray("scanner");
-        for(int i = 0, k=0; i < scan.length(); i+=5, k++)
+        for(int i = 0; i < scan.length(); i+=5)
             for(int j = 0; j < 5; j++)
-                scanner[k][j] = scan.getInt(i+j);
+                scanner[i/5][j] = scan.getInt(i+j);
         
         System.out.print("Reconocimiento: actualizo scanner ");
         for(int i = 0; i < scan.length(); i++)

@@ -134,8 +134,9 @@ public class Vehiculo extends SingleAgent{
                 if(recepcion.has("result")){
                     recepcion_plano = recepcion.getString("result");
                     if(!recepcion_plano.equals("BAD_MAP")&&!recepcion_plano.equals("BAD_PROTOCOL")&&!recepcion_plano.equals("BAD_KEY")
-                            &&!recepcion_plano.equals("BAD_COMMAND")&&!recepcion_plano.equals("OK"))
+                            &&!recepcion_plano.equals("BAD_COMMAND")&&!recepcion_plano.equals("OK")){
                         key = recepcion.getString("result");    //Recibimos la key
+                    }
                     else if(!recepcion_plano.equals("OK"))
                         finalizar = true;
                 }
