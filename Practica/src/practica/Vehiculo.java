@@ -38,9 +38,6 @@ public class Vehiculo extends SingleAgent{
         conexion();   
     }
     
-    public void mover(JSONObject movimiento){
-    }
-    
     public void conexion() throws JSONException{
         envio = new JSONObject();
         envio.put("command","login");
@@ -65,21 +62,22 @@ public class Vehiculo extends SingleAgent{
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
         System.out.println("Vehiculo: " + recepcion_plano);
-        actuar();
     }
     
     @Override
     public void init(){
+        System.out.println("Vehiculo: vivo");
     }
     
     @Override
     public void execute(){
         boolean primero = true;
-        while(true && !finalizar){
+        while(!finalizar){
             try {
                 if(primero)
                     recibir_mensaje();
                 recibir_mensaje();
+                actuar();
                 primero = false;
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);

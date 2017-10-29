@@ -100,7 +100,7 @@ public class Reconocimiento extends SingleAgent{
     @Override
     public void execute(){
         int contador = 0;
-        while(true && !finalizar){
+        while(!finalizar){
             try {
                 recibir_mensaje();
                 if(contador % 3 == 0){

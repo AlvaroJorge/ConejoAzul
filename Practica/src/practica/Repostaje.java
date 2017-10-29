@@ -47,14 +47,14 @@ public class Repostaje extends SingleAgent{
         recepcion = new JSONObject(inbox.getContent());
         recepcion_plano = recepcion.toString();
         System.out.println("Repostaje: " + recepcion_plano);
-        actuar();
     }
     
     @Override
     public void execute(){
-        while(true && !finalizar){
+        while(!finalizar){
             try {
                 recibir_mensaje();
+                actuar();
             } catch (InterruptedException | JSONException ex) {
                 Logger.getLogger(Repostaje.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -68,6 +68,11 @@ public class Repostaje extends SingleAgent{
         } finally {
             super.finalize();
         }
+    }
+    
+    @Override
+    public void init(){
+        System.out.println("Repostaje: vivo");
     }
     
     public void actuar() throws JSONException{
