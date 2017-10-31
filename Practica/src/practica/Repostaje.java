@@ -43,9 +43,12 @@ public class Repostaje extends SingleAgent{
     
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
-        recepcion = new JSONObject(inbox.getContent());
-        recepcion_plano = recepcion.toString();
-        System.out.println("Repostaje: " + recepcion_plano);
+        if(!inbox.getContent().equals("\"CRASHED\"")){
+            recepcion = new JSONObject(inbox.getContent());
+            recepcion_plano = recepcion.toString();
+            System.out.println("Repostaje: " + recepcion_plano);
+        }else
+            finalizar = true;
     }
     
     @Override
@@ -79,18 +82,16 @@ public class Repostaje extends SingleAgent{
         if(recepcion.has("vehiculo")){
             if(recepcion.getString("vehiculo").equals("cerrar"))
                 finalizar = true;
-        }else{
-            if(recepcion.has("battery")){
-                //Actuar según niveles de batería
-                recepcion_plano = recepcion.getString("battery");
-                bateria = (int) Float.parseFloat(recepcion_plano);
-                envio = new JSONObject();
-                if(bateria <= 2)//mandar mensaje de repostaje a vehiculo
-                    envio.put("repostaje","Repostaje");
-                else//mandar mensaje ok a vehiculo
-                    envio.put("repostaje","OK");
-                enviar_mensaje(envio.toString(), "vehiculo");
-            }
+        }else if(recepcion.has("battery")){
+            //Actuar según niveles de batería
+            recepcion_plano = recepcion.getString("battery");
+            bateria = (int) Float.parseFloat(recepcion_plano);
+            envio = new JSONObject();
+            if(bateria <= 2)//mandar mensaje de repostaje a vehiculo
+                envio.put("repostaje","Repostaje");
+            else//mandar mensaje ok a vehiculo
+                envio.put("repostaje","OK");
+            enviar_mensaje(envio.toString(), "vehiculo4");
         }
     }
 }
