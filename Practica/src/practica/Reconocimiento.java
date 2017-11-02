@@ -9,6 +9,7 @@ import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
 import static java.lang.Integer.parseInt;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.codehaus.jettison.json.JSONArray;
@@ -33,6 +34,9 @@ public class Reconocimiento extends SingleAgent{
     private boolean finalizar;
     private int pasos;
     
+    //public String movimiento;
+    Random r;
+    
     public Reconocimiento(AgentID aid) throws Exception {
         super(aid);
         camino_recorrido = new int[1000][1000];
@@ -40,6 +44,8 @@ public class Reconocimiento extends SingleAgent{
         scanner = new float[5][5];
         finalizar = false;
         pasos = 0;
+        
+        r = new Random();
     }
     
     public void actualizar_GPS() throws JSONException{
@@ -131,18 +137,110 @@ public class Reconocimiento extends SingleAgent{
         System.out.println("Reconocimiento: vivo");
     }
     
+    public static String MovimientoAleatorio(String letters, Random r){
+        char c = letters.charAt(r.nextInt(letters.length()));
+        
+        String movimiento = "";
+        
+        if(c == 'q'){
+            movimiento = "moveNW";
+        }
+        
+        if(c == 'n'){
+            movimiento = "moveN";
+        }
+        
+        if(c == 'r'){
+            movimiento = "moveNE";
+        }
+        
+        if(c == 'w'){
+            movimiento = "moveW";
+        }
+        
+        if(c == 'e'){
+            movimiento = "moveE";
+        }
+        
+        if(c == 'a'){
+            movimiento = "moveSW";
+        }
+        
+        if(c == 's'){
+            movimiento = "moveS";
+        }
+        
+        if(c == 'd'){
+            movimiento = "moveSE";
+        }
+        
+        return movimiento;
+    }
+    
     public void actuar() throws JSONException{
         
         if(recepcion.has("vehiculo")){
             if(recepcion.getString("vehiculo").equals("cerrar"))
                 finalizar = true;
         }else{//IMPLEMENTAR
-            envio = new JSONObject();
-            envio.put("pensamiento","moveS");
-            System.out.println("Reconocimiento Actuar: moviendo al norte");
-            enviar_mensaje(envio.toString(),"vehiculo4");
-            pasos++;
-            System.out.println("Reconocimiento pasos:" + pasos);
+            if(radar[2][2] == 2){
+                envio = new JSONObject();
+                envio.put("pensamiento","llegada");
+                System.out.println("Reconocimiento Actuar: objetivo encontrado con exito");
+                enviar_mensaje(envio.toString(),"vehiculo14");
+                finalizar = true;
+            }
+            else{
+                envio = new JSONObject();
+                
+                String posibles_direcciones = "";
+                
+                if(radar[1][1] != 1){
+                    posibles_direcciones = posibles_direcciones + 'q';
+                }
+                
+                if(radar[1][2] != 1){
+                    posibles_direcciones = posibles_direcciones + 'n';
+                }
+                
+                if(radar[1][3] != 1){
+                    posibles_direcciones = posibles_direcciones + 'r';
+                }
+                
+                if(radar[2][1] != 1){
+                    posibles_direcciones = posibles_direcciones + 'w';
+                }
+                
+                if(radar[2][3] != 1){
+                    posibles_direcciones = posibles_direcciones + 'e';
+                }
+                
+                if(radar[3][1] != 1){
+                    posibles_direcciones = posibles_direcciones + 'a';
+                }
+                
+                if(radar[3][2] != 1){
+                    posibles_direcciones = posibles_direcciones + 's';
+                }
+                
+                if(radar[3][3] != 1){
+                    posibles_direcciones = posibles_direcciones + 'd';
+                }
+                       
+                
+                String movimiento = MovimientoAleatorio(posibles_direcciones, r);
+                
+                
+                
+               
+                //movimiento = "moveSW";
+                envio.put("pensamiento", movimiento);
+                System.out.println("Reconocimiento Actuar: moviendo");
+                enviar_mensaje(envio.toString(),"vehiculo14");
+                pasos++;
+                System.out.println("Reconocimiento pasos:" + pasos);
+            }
         }
     }
+    
 }

@@ -45,11 +45,11 @@ public class Vehiculo extends SingleAgent{
     public void conexion() throws JSONException{
         envio = new JSONObject();
         envio.put("command","login");
-        envio.put("world","map1");
-        envio.put("radar","reconocimiento4");
-        envio.put("scanner","reconocimiento4");
-        envio.put("battery","repostaje4");
-        envio.put("gps","reconocimiento4");
+        envio.put("world","map2");
+        envio.put("radar","reconocimiento14");
+        envio.put("scanner","reconocimiento14");
+        envio.put("battery","repostaje14");
+        envio.put("gps","reconocimiento14");
         enviar_mensaje(envio.toString(), "Achernar");
     }
     
@@ -91,13 +91,13 @@ public class Vehiculo extends SingleAgent{
         try {
             envio = new JSONObject();
             try {
+                envio.put("vehiculo","cerrar");
+                enviar_mensaje(envio.toString(),"repostaje14");
+                enviar_mensaje(envio.toString(),"reconocimiento14");
+                envio = new JSONObject();
                 envio.put("command","logout");
                 envio.put("key",key);
                 enviar_mensaje(envio.toString(),"Achernar");
-                envio = new JSONObject();
-                envio.put("vehiculo","cerrar");
-                enviar_mensaje(envio.toString(),"repostaje2");
-                enviar_mensaje(envio.toString(),"reconocimiento2");
             } catch (JSONException ex) {
             Logger.getLogger(Vehiculo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -114,8 +114,14 @@ public class Vehiculo extends SingleAgent{
             mensaje_repostar = recepcion_plano;
         }else if(recepcion.has("pensamiento")){
             recepcion_plano = recepcion.getString("pensamiento");
-            reconocimiento = true;
-            mensaje_movimiento = recepcion_plano;
+            if(recepcion_plano.equals("llegada")){
+                System.out.println("Vehiculo: llegue, finalizando agentes.");   
+                finalizar = true;
+            }
+            else{
+                reconocimiento = true;
+                mensaje_movimiento = recepcion_plano;
+            }
         }else{
             if(recepcion.has("result")){
                 recepcion_plano = recepcion.getString("result");
@@ -125,7 +131,7 @@ public class Vehiculo extends SingleAgent{
                 else if(!recepcion_plano.equals("OK"))
                     finalizar = true;
             }
-        }
+        }      
         
         if(reconocimiento && repostaje){
             if(mensaje_repostar.equals("Repostaje")){
@@ -140,7 +146,7 @@ public class Vehiculo extends SingleAgent{
                 envio.put("command",mensaje_movimiento);
                 envio.put("key",key);
                 enviar_mensaje(envio.toString(),"Achernar");
-                System.out.println("Enviado al servidor movimiento");
+                System.out.println("Enviado al servidor movimiento");     
             }
             reconocimiento = false;
             repostaje = false;

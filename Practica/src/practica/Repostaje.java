@@ -91,7 +91,7 @@ public class Repostaje extends SingleAgent{
                 envio.put("repostaje","Repostaje");
             else//mandar mensaje ok a vehiculo
                 envio.put("repostaje","OK");
-            enviar_mensaje(envio.toString(), "vehiculo4");
+            enviar_mensaje(envio.toString(), "vehiculo14");
         }
     }
 }
