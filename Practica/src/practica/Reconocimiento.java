@@ -171,16 +171,9 @@ public class Reconocimiento extends SingleAgent{
                 int menor_paso = 50000;
                 float menor_distancia = 50000;
                 
-                if(radar[1][1] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1] == menor_paso){
-                        if(scanner[1][1] < menor_distancia){
-                            movimiento = "moveNW";
-                        }
-                    }
-                    else{
-                        movimiento = "moveNW";                      
-                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1];
-                    }   
+                if(radar[1][1] != 1){
+                    movimiento = "moveNW";                      
+                    menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1];
                     menor_distancia = scanner[1][1];
                 }
                 
