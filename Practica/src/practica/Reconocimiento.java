@@ -45,8 +45,6 @@ public class Reconocimiento extends SingleAgent{
         finalizar = false;
         pasos = 0;
         
-        r = new Random();
-        
         camino_recorrido = new int[1000][1000];
         
         for(int i=0; i<1000; i++){
@@ -315,12 +313,6 @@ public class Reconocimiento extends SingleAgent{
                 }
                 
                 
-                
-                
-                
-                
-               
-                //movimiento = "moveSW";
                 envio.put("pensamiento", movimiento);
                 System.out.println("Reconocimiento Actuar: moviendo");
                 enviar_mensaje(envio.toString(),"vehiculo14");

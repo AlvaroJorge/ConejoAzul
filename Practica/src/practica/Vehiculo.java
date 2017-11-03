@@ -18,8 +18,6 @@ import org.codehaus.jettison.json.JSONObject;
  * @author alex
  */
 public class Vehiculo extends SingleAgent{
-    //prueba
-    private int mapa;
     private JSONObject envio;
     private JSONObject recepcion;
     private ACLMessage outbox, inbox;
@@ -37,8 +35,7 @@ public class Vehiculo extends SingleAgent{
         inbox = null;
         repostaje=false;
         finalizar = false;
-        reconocimiento = false;
-        
+        reconocimiento = false; 
         conexion();   
     }
     
