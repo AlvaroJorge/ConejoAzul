@@ -88,7 +88,7 @@ public class Reconocimiento extends SingleAgent{
     }
     
     public void actualizarMatrizAuxiliar(){
-        camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y] = pasos; 
+        camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x] = pasos; 
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -155,7 +155,7 @@ public class Reconocimiento extends SingleAgent{
                 envio = new JSONObject();
                 envio.put("pensamiento","llegada");
                 System.out.println("Reconocimiento Actuar: objetivo encontrado con exito");
-                enviar_mensaje(envio.toString(),"vehiculo14");
+                enviar_mensaje(envio.toString(),"vehiculo15");
                 finalizar = true;
             }
             else{
@@ -169,116 +169,54 @@ public class Reconocimiento extends SingleAgent{
                 
                 
                 int menor_paso = 50000;
-                float menor_distancia = -1;
+                float menor_distancia = 50000;
                 
-                if(radar[1][1] != 1){
+                if(radar[1][1] != 1 && camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x-1] <= menor_paso && scanner[1][1] <= menor_distancia){
                     movimiento = "moveNW";                      
-                    menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1];
+                    menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x-1];
                     menor_distancia = scanner[1][1];
                 }
                 
-                if(radar[1][2] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] == menor_paso){
-                        if(scanner[1][2] < menor_distancia){
-                            movimiento = "moveN";
-                            menor_distancia = scanner[1][2];
-                        }
-                    }
-                    else{
+                if(radar[1][2] != 1 && camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x] <= menor_paso && scanner[1][2] <= menor_distancia){
                         movimiento = "moveN";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y];
                         menor_distancia = scanner[1][2];
-                    }  
-                    
+                        menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x]; 
                 }             
                
-                if(radar[1][3] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1] == menor_paso){
-                        if(scanner[1][3] < menor_distancia){
-                            movimiento = "moveNE";
-                            menor_distancia = scanner[1][3];
-                        }
-                    }
-                    else{
-                        movimiento = "moveNE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1];
-                        menor_distancia = scanner[1][3];
-                    }    
-                    
+                if(radar[1][3] != 1 && camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x+1] <= menor_paso && scanner[1][3] <= menor_distancia){
+                    movimiento = "moveNE";
+                    menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x+1];
+                    menor_distancia = scanner[1][3];
                 }
                 
-               if(radar[2][1] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] == menor_paso){
-                        if(scanner[2][1] < menor_distancia){
-                            movimiento = "moveW";
-                            menor_distancia = scanner[2][1];
-                        }
-                    }
-                    else{
-                        movimiento = "moveW";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1];
-                        menor_distancia = scanner[2][1];
-                    }  
-                    
+               if(radar[2][1] != 1 && camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x-1] <= menor_paso && scanner[2][1] <= menor_distancia){
+                    movimiento = "moveW";
+                    menor_distancia = scanner[2][1];
+                    menor_paso = camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x-1];
                 }
                 
-                if(radar[2][3] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] == menor_paso){
-                        if(scanner[2][3] < menor_distancia){
-                            movimiento = "moveE";         
-                            menor_distancia = scanner[2][3];
-                        }
-                    }
-                    else{
-                        movimiento = "moveE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1];
-                        menor_distancia = scanner[2][3];
-                    }   
-                    
+                if(radar[2][3] != 1 && camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x+1] <= menor_paso && scanner[2][3] <= menor_distancia){
+                    movimiento = "moveE";         
+                    menor_distancia = scanner[2][3];
+                    menor_paso = camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x+1];             
                 }
                 
-                if(radar[3][1] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] == menor_paso){
-                        if(scanner[3][1] < menor_distancia){
-                            movimiento = "moveSW";  
-                            menor_distancia = scanner[3][1];
-                        }
-                    }
-                    else{
-                        movimiento = "moveSW";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1];
-                        menor_distancia = scanner[3][1];
-                    }                    
+                if(radar[3][1] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x-1] <= menor_paso && scanner[3][1] <= menor_distancia){
+                    movimiento = "moveSW";
+                    menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x-1];
+                    menor_distancia = scanner[3][1];                 
                 }
                 
-               if(radar[3][2] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] == menor_paso){
-                        if(scanner[3][2] < menor_distancia){
-                            movimiento = "moveS";
-                            menor_distancia = scanner[3][2];
-                        }
-                    }
-                    else{
-                        movimiento = "moveS";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y];
-                        menor_distancia = scanner[3][2];
-                    }   
-                    
+               if(radar[3][2] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x] <= menor_paso && scanner[3][2] <= menor_distancia){
+                    movimiento = "moveS";
+                    menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x];
+                    menor_distancia = scanner[3][2];
                 }
                 
-                if(radar[3][3] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] == menor_paso){
-                        if(scanner[3][3] < menor_distancia){
-                            movimiento = "moveSE";
-                            menor_distancia = scanner[3][3];
-                        }
-                    }
-                    else{
-                        movimiento = "moveSE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1];
-                        menor_distancia = scanner[3][3];
-                    }   
-                    
+                if(radar[3][3] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x+1] <= menor_paso && scanner[3][3] <= menor_distancia){
+                    movimiento = "moveSE";
+                    menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x+1];
+                    menor_distancia = scanner[3][3];
                 }
                 
                 
@@ -313,17 +251,11 @@ public class Reconocimiento extends SingleAgent{
                 if(radar[3][3] == 2){
                     movimiento = "moveSE";
                 }
-                
-                
-                
-                
-                
-                
                
                 //movimiento = "moveSW";
                 envio.put("pensamiento", movimiento);
                 System.out.println("Reconocimiento Actuar: moviendo");
-                enviar_mensaje(envio.toString(),"vehiculo14");
+                enviar_mensaje(envio.toString(),"vehiculo15");
                 pasos++;
                 System.out.println("Reconocimiento pasos:" + pasos);
             }
