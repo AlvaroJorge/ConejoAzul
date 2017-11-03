@@ -39,13 +39,21 @@ public class Reconocimiento extends SingleAgent{
     
     public Reconocimiento(AgentID aid) throws Exception {
         super(aid);
-        camino_recorrido = new int[1000][1000];
+        
         radar = new int [5][5]; 
         scanner = new float[5][5];
         finalizar = false;
         pasos = 0;
         
         r = new Random();
+        
+        camino_recorrido = new int[1000][1000];
+        
+        for(int i=0; i<1000; i++){
+            for(int j=0; j<1000; j++){
+                camino_recorrido[i][j] = -1;
+            }
+        }
     }
     
     public void actualizar_GPS() throws JSONException{
@@ -79,8 +87,8 @@ public class Reconocimiento extends SingleAgent{
                 System.out.print(scanner[i][j] + ", ");
     }
     
-    public void actualizar_Matriz_AUX(){
-        
+    public void actualizarMatrizAuxiliar(){
+        camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y] = pasos; 
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -115,7 +123,6 @@ public class Reconocimiento extends SingleAgent{
                 recibir_mensaje();
                 contador++;
                 if(contador % 3 == 0){
-                    actualizar_Matriz_AUX();
                     actuar();
                 }
             } catch (InterruptedException | JSONException ex) {
@@ -137,45 +144,6 @@ public class Reconocimiento extends SingleAgent{
         System.out.println("Reconocimiento: vivo");
     }
     
-    public static String MovimientoAleatorio(String letters, Random r){
-        char c = letters.charAt(r.nextInt(letters.length()));
-        
-        String movimiento = "";
-        
-        if(c == 'q'){
-            movimiento = "moveNW";
-        }
-        
-        if(c == 'n'){
-            movimiento = "moveN";
-        }
-        
-        if(c == 'r'){
-            movimiento = "moveNE";
-        }
-        
-        if(c == 'w'){
-            movimiento = "moveW";
-        }
-        
-        if(c == 'e'){
-            movimiento = "moveE";
-        }
-        
-        if(c == 'a'){
-            movimiento = "moveSW";
-        }
-        
-        if(c == 's'){
-            movimiento = "moveS";
-        }
-        
-        if(c == 'd'){
-            movimiento = "moveSE";
-        }
-        
-        return movimiento;
-    }
     
     public void actuar() throws JSONException{
         
@@ -191,44 +159,157 @@ public class Reconocimiento extends SingleAgent{
                 finalizar = true;
             }
             else{
-                envio = new JSONObject();
                 
-                String posibles_direcciones = "";
+                actualizarMatrizAuxiliar();
                 
-                if(radar[1][1] != 1){
-                    posibles_direcciones = posibles_direcciones + 'q';
+                envio = new JSONObject();                          
+                String movimiento = "";
+                
+                
+                
+                
+                int menor_paso = 50000;
+                float menor_distancia = 50000;
+                
+                if(radar[1][1] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1] == menor_paso){
+                        if(scanner[1][1] < menor_distancia){
+                            movimiento = "moveNW";
+                            menor_distancia = scanner[1][1];
+                        }
+                    }
+                    else{
+                        movimiento = "moveNW";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1];
+                    }           
                 }
                 
-                if(radar[1][2] != 1){
-                    posibles_direcciones = posibles_direcciones + 'n';
+                if(radar[1][2] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] == menor_paso){
+                        if(scanner[1][2] < menor_distancia){
+                            movimiento = "moveN";
+                            menor_distancia = scanner[1][2];
+                        }
+                    }
+                    else{
+                        movimiento = "moveN";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y];
+                    }           
+                }             
+               
+                if(radar[1][3] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1] <= menor_paso){
+                    if(camino_recorrido[posicion_x-1][posicion_y+1] == menor_paso){
+                        if(scanner[1][3] < menor_distancia){
+                            movimiento = "moveNE";
+                            menor_distancia = scanner[1][3];
+                        }
+                    }
+                    else{
+                        movimiento = "moveNE";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1];
+                    }           
                 }
                 
-                if(radar[1][3] != 1){
-                    posibles_direcciones = posibles_direcciones + 'r';
+               if(radar[2][1] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] == menor_paso){
+                        if(scanner[2][1] < menor_distancia){
+                            movimiento = "moveW";
+                            menor_distancia = scanner[2][1];
+                        }
+                    }
+                    else{
+                        movimiento = "moveW";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1];
+                    }           
                 }
                 
-                if(radar[2][1] != 1){
-                    posibles_direcciones = posibles_direcciones + 'w';
+                if(radar[2][3] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] == menor_paso){
+                        if(scanner[2][3] < menor_distancia){
+                            movimiento = "moveE";
+                            menor_distancia = scanner[2][3];
+                        }
+                    }
+                    else{
+                        movimiento = "moveE";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1];
+                    }           
                 }
                 
-                if(radar[2][3] != 1){
-                    posibles_direcciones = posibles_direcciones + 'e';
+                if(radar[3][1] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] == menor_paso){
+                        if(scanner[3][1] < menor_distancia){
+                            movimiento = "moveSW";
+                            menor_distancia = scanner[3][1];
+                        }
+                    }
+                    else{
+                        movimiento = "moveSW";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1];
+                    }           
                 }
                 
-                if(radar[3][1] != 1){
-                    posibles_direcciones = posibles_direcciones + 'a';
+               if(radar[3][2] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] == menor_paso){
+                        if(scanner[3][2] < menor_distancia){
+                            movimiento = "moveS";
+                            menor_distancia = scanner[3][2];
+                        }
+                    }
+                    else{
+                        movimiento = "moveS";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y];
+                    }           
                 }
                 
-                if(radar[3][2] != 1){
-                    posibles_direcciones = posibles_direcciones + 's';
+                if(radar[3][3] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] == menor_paso){
+                        if(scanner[3][3] < menor_distancia){
+                            movimiento = "moveSE";
+                            menor_distancia = scanner[3][3];
+                        }
+                    }
+                    else{
+                        movimiento = "moveSE";
+                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1];
+                    }           
                 }
                 
-                if(radar[3][3] != 1){
-                    posibles_direcciones = posibles_direcciones + 'd';
-                }
-                       
                 
-                String movimiento = MovimientoAleatorio(posibles_direcciones, r);
+                if(radar[1][1] == 2){
+                    movimiento = "moveNW";
+                }    
+                
+                if(radar[1][2] == 2){
+                    movimiento = "moveN";
+                }
+                
+                if(radar[1][3] == 2){
+                    movimiento = "moveNE";
+                }
+                
+                if(radar[2][1] == 2){
+                    movimiento = "moveW";
+                }
+                
+                if(radar[2][3] == 2){
+                    movimiento = "moveE";
+                }
+                
+                if(radar[3][1] == 2){
+                    movimiento = "moveSW";
+                }
+                
+                if(radar[3][3] == 2){
+                    movimiento = "moveSE";
+                }
+                
+                if(radar[1][1] == 2){
+                    movimiento = "moveNW";
+                }
+                
+                
+                
                 
                 
                 
