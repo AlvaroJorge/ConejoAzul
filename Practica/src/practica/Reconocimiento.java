@@ -88,7 +88,7 @@ public class Reconocimiento extends SingleAgent{
     }
     
     public void actualizarMatrizAuxiliar(){
-        camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y] = pasos; 
+        camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x] = pasos; 
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -169,16 +169,16 @@ public class Reconocimiento extends SingleAgent{
                 
                 
                 int menor_paso = 50000;
-                float menor_distancia = -1;
+                float menor_distancia = 50000;
                 
                 if(radar[1][1] != 1){
                     movimiento = "moveNW";                      
-                    menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y-1];
+                    menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x-1];
                     menor_distancia = scanner[1][1];
                 }
                 
-                if(radar[1][2] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y] == menor_paso){
+                if(radar[1][2] != 1 && camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x] == menor_paso){
                         if(scanner[1][2] < menor_distancia){
                             movimiento = "moveN";
                             menor_distancia = scanner[1][2];
@@ -186,14 +186,14 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveN";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x];
                         menor_distancia = scanner[1][2];
                     }  
                     
                 }             
                
-                if(radar[1][3] != 1 && camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1] == menor_paso){
+                if(radar[1][3] != 1 && camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x+1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x+1] == menor_paso){
                         if(scanner[1][3] < menor_distancia){
                             movimiento = "moveNE";
                             menor_distancia = scanner[1][3];
@@ -201,14 +201,14 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveNE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x-1][1000/2 + posicion_y+1];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y-1][1000/2 + posicion_x+1];
                         menor_distancia = scanner[1][3];
                     }    
                     
                 }
                 
-               if(radar[2][1] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1] == menor_paso){
+               if(radar[2][1] != 1 && camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x-1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x-1] == menor_paso){
                         if(scanner[2][1] < menor_distancia){
                             movimiento = "moveW";
                             menor_distancia = scanner[2][1];
@@ -216,14 +216,14 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveW";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y-1];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x-1];
                         menor_distancia = scanner[2][1];
                     }  
                     
                 }
                 
-                if(radar[2][3] != 1 && camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1] == menor_paso){
+                if(radar[2][3] != 1 && camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x+1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x+1] == menor_paso){
                         if(scanner[2][3] < menor_distancia){
                             movimiento = "moveE";         
                             menor_distancia = scanner[2][3];
@@ -231,14 +231,14 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x][1000/2 + posicion_y+1];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x+1];
                         menor_distancia = scanner[2][3];
                     }   
                     
                 }
                 
-                if(radar[3][1] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1] == menor_paso){
+                if(radar[3][1] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x-1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x-1] == menor_paso){
                         if(scanner[3][1] < menor_distancia){
                             movimiento = "moveSW";  
                             menor_distancia = scanner[3][1];
@@ -246,13 +246,13 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveSW";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y-1];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x-1];
                         menor_distancia = scanner[3][1];
                     }                    
                 }
                 
-               if(radar[3][2] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y] == menor_paso){
+               if(radar[3][2] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x] == menor_paso){
                         if(scanner[3][2] < menor_distancia){
                             movimiento = "moveS";
                             menor_distancia = scanner[3][2];
@@ -260,14 +260,14 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveS";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x];
                         menor_distancia = scanner[3][2];
                     }   
                     
                 }
                 
-                if(radar[3][3] != 1 && camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] <= menor_paso){
-                    if(camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1] == menor_paso){
+                if(radar[3][3] != 1 && camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x+1] <= menor_paso){
+                    if(camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x+1] == menor_paso){
                         if(scanner[3][3] < menor_distancia){
                             movimiento = "moveSE";
                             menor_distancia = scanner[3][3];
@@ -275,7 +275,7 @@ public class Reconocimiento extends SingleAgent{
                     }
                     else{
                         movimiento = "moveSE";
-                        menor_paso = camino_recorrido[1000/2 + posicion_x+1][1000/2 + posicion_y+1];
+                        menor_paso = camino_recorrido[1000/2 + posicion_y+1][1000/2 + posicion_x+1];
                         menor_distancia = scanner[3][3];
                     }   
                     
