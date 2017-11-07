@@ -33,6 +33,7 @@ public class Reconocimiento extends SingleAgent{
     private String recepcion_plano;
     private boolean finalizar;
     private int pasos;
+    private int pasos_inaccesible;
     private boolean visto;
     
     //public String movimiento;
@@ -45,6 +46,7 @@ public class Reconocimiento extends SingleAgent{
         scanner = new float[5][5];
         finalizar = false;
         pasos = 0;
+        pasos_inaccesible = 0;
         
         camino_recorrido = new int[1000][1000];
         
@@ -162,8 +164,10 @@ public class Reconocimiento extends SingleAgent{
  */
     public void actuar() throws JSONException{
         
-        if(visto)
+        if(visto){
             System.out.println("visto");
+            pasos_inaccesible++;
+        }
         
         if(recepcion.has("vehiculo")){
             if(recepcion.getString("vehiculo").equals("cerrar"))
@@ -173,6 +177,12 @@ public class Reconocimiento extends SingleAgent{
                 envio = new JSONObject();
                 envio.put("pensamiento","llegada");
                 System.out.println("Reconocimiento Actuar: objetivo encontrado con exito");
+                enviar_mensaje(envio.toString(),"vehiculo14");
+                finalizar = true;
+            }else if(pasos_inaccesible>1000){
+                envio = new JSONObject();
+                envio.put("pensamiento","inaccesible");
+                System.out.println("Reconocimiento Actuar: objetivo no puede ser encontrado");
                 enviar_mensaje(envio.toString(),"vehiculo14");
                 finalizar = true;
             }

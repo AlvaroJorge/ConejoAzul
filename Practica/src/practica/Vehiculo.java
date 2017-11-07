@@ -114,6 +114,9 @@ public class Vehiculo extends SingleAgent{
             if(recepcion_plano.equals("llegada")){
                 System.out.println("Vehiculo: llegue, finalizando agentes.");   
                 finalizar = true;
+            }else if(recepcion_plano.equals("inaccesible")){
+                System.out.println("Vehiculo: el objetivo es inaccesible");   
+                finalizar = true;
             }
             else{
                 reconocimiento = true;
