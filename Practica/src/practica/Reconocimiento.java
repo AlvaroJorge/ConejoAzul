@@ -145,6 +145,7 @@ public class Reconocimiento extends SingleAgent{
     
     /**
  *
+ * @author alvaro
  * @author sergio
  * @author joaquin
  * @author salome
