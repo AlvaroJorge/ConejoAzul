@@ -143,6 +143,12 @@ public class Reconocimiento extends SingleAgent{
     }
     
     
+    /**
+ *
+ * @author sergio
+ * @author joaquin
+ * @author salome
+ */
     public void actuar() throws JSONException{
         
         if(recepcion.has("vehiculo")){
