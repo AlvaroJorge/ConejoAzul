@@ -33,6 +33,7 @@ public class Reconocimiento extends SingleAgent{
     private String recepcion_plano;
     private boolean finalizar;
     private int pasos;
+    private boolean visto;
     
     //public String movimiento;
     Random r;
@@ -86,7 +87,16 @@ public class Reconocimiento extends SingleAgent{
     }
     
     public void actualizarMatrizAuxiliar(){
-        camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x] = pasos; 
+        for(int i = 0; i < 5; i++)
+            for(int j = 0; j < 5; j++){
+                if(radar[i][j]==1)
+                    camino_recorrido[1000/2 + posicion_y - 2 + i][1000/2 + posicion_x - 2 + j] = 50000;
+                else if(radar[i][j]==2){
+                    camino_recorrido[1000/2 + posicion_y - 2 + i][1000/2 + posicion_x - 2 + j] = -2;
+                    visto = true;
+                }
+            }
+        camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x] = pasos;
     }
     
     public void enviar_mensaje(String mensaje, String receptor){
@@ -151,6 +161,9 @@ public class Reconocimiento extends SingleAgent{
  * @author salome
  */
     public void actuar() throws JSONException{
+        
+        if(visto)
+            System.out.println("visto");
         
         if(recepcion.has("vehiculo")){
             if(recepcion.getString("vehiculo").equals("cerrar"))
