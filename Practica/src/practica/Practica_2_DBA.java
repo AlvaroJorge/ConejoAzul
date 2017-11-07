@@ -25,11 +25,11 @@ public class Practica_2_DBA {
         SingleAgent repostaje;
         AgentsConnection.connect("isg2.ugr.es",6000,"Achernar","Leon","Matute",false);
         System.out.println("\n");
-        reconocimiento = new Reconocimiento(new AgentID("reconocimiento14"));
-        repostaje = new Repostaje(new AgentID("repostaje14"));
+        reconocimiento = new Reconocimiento(new AgentID("reconocimiento15"));
+        repostaje = new Repostaje(new AgentID("repostaje15"));
         repostaje.start(); 
         reconocimiento.start();
-        vehiculo = new Vehiculo(new AgentID("vehiculo14"));
+        vehiculo = new Vehiculo(new AgentID("vehiculo15"));
         vehiculo.start();
     }
     
