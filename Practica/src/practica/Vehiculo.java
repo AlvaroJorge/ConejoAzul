@@ -133,6 +133,7 @@ public class Vehiculo extends SingleAgent{
     /**
     *
     * @author Alejandro
+    * @author Alvaro (finalizacion agente al ser informado de objetivo encontrado)
     */
     public void actuar() throws JSONException, InterruptedException{
         if(recepcion.has("repostaje")){

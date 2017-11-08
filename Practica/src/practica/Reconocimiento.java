@@ -29,7 +29,6 @@ public class Reconocimiento extends SingleAgent{
     private JSONObject envio;
     private JSONObject recepcion;
     private ACLMessage outbox, inbox;
-    private String recepcion_plano;
     private boolean finalizar;
     private int pasos;
     private int pasos_inaccesible;
@@ -149,7 +148,6 @@ public class Reconocimiento extends SingleAgent{
         inbox = receiveACLMessage();
         if(!inbox.getContent().equals("\"CRASHED\"")){
             recepcion = new JSONObject(inbox.getContent());
-            recepcion_plano = recepcion.toString();
             if(recepcion.has("scanner"))
                 actualizar_Scanner();
             else if(recepcion.has("gps"))
