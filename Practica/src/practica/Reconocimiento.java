@@ -206,7 +206,7 @@ public class Reconocimiento extends SingleAgent{
      *
      * @author Alvaro
      * @author Alejandro (poco)
-     * @author Joaquin (solo lo del mapa inaccesible)
+     * @author Joaquin y Sergio (mapa inaccesible)
     */
     public void actuar() throws JSONException{
         
