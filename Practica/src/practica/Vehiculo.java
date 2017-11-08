@@ -47,10 +47,10 @@ public class Vehiculo extends SingleAgent{
         envio = new JSONObject();
         envio.put("command","login");
         envio.put("world","map9");
-        envio.put("radar","reconocimiento14");
-        envio.put("scanner","reconocimiento14");
-        envio.put("battery","repostaje14");
-        envio.put("gps","reconocimiento14");
+        envio.put("radar","reconocimiento15");
+        envio.put("scanner","reconocimiento15");
+        envio.put("battery","repostaje15");
+        envio.put("gps","reconocimiento15");
         enviar_mensaje(envio.toString(), "Achernar");
     }
     
@@ -115,8 +115,8 @@ public class Vehiculo extends SingleAgent{
             envio = new JSONObject();
             try {
                 envio.put("vehiculo","cerrar");
-                enviar_mensaje(envio.toString(),"repostaje14");
-                enviar_mensaje(envio.toString(),"reconocimiento14");
+                enviar_mensaje(envio.toString(),"repostaje15");
+                enviar_mensaje(envio.toString(),"reconocimiento15");
                 envio = new JSONObject();
                 envio.put("command","logout");
                 envio.put("key",key);
@@ -134,6 +134,7 @@ public class Vehiculo extends SingleAgent{
     *
     * @author Alejandro
     * @author Alvaro (finalizacion agente al ser informado de objetivo encontrado)
+    * @author Joaquin (mesaje obetivo inacesible)
     */
     public void actuar() throws JSONException, InterruptedException{
         if(recepcion.has("repostaje")){
