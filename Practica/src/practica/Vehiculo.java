@@ -46,7 +46,7 @@ public class Vehiculo extends SingleAgent{
     public void conexion() throws JSONException{
         envio = new JSONObject();
         envio.put("command","login");
-        envio.put("world","map9");
+        envio.put("world","map11");
         envio.put("radar","reconocimiento15");
         envio.put("scanner","reconocimiento15");
         envio.put("battery","repostaje15");
