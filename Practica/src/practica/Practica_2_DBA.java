@@ -15,6 +15,7 @@ import es.upv.dsic.gti_ia.core.SingleAgent;
 public class Practica_2_DBA {
 
     /**
+     * @author Alejandro
      * @param args the command line arguments
      * @throws java.lang.Exception
      */

@@ -15,7 +15,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
- * @author alex
+ * @author Alejandro
  */
 public class Vehiculo extends SingleAgent{
     private JSONObject envio;
@@ -39,6 +39,10 @@ public class Vehiculo extends SingleAgent{
         conexion();   
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     public void conexion() throws JSONException{
         envio = new JSONObject();
         envio.put("command","login");
@@ -50,6 +54,10 @@ public class Vehiculo extends SingleAgent{
         enviar_mensaje(envio.toString(), "Achernar");
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     public void enviar_mensaje(String mensaje, String receptor){
         outbox = new ACLMessage();
         outbox.setSender(getAid());
@@ -59,6 +67,10 @@ public class Vehiculo extends SingleAgent{
         System.out.println(mensaje);
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         recepcion = new JSONObject(inbox.getContent());
@@ -66,11 +78,20 @@ public class Vehiculo extends SingleAgent{
         System.out.println("Vehiculo: " + recepcion_plano);
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void init(){
         System.out.println("Vehiculo: vivo");
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void execute(){
         while(!finalizar){
@@ -83,6 +104,11 @@ public class Vehiculo extends SingleAgent{
         }
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void finalize(){
         try {
@@ -104,6 +130,10 @@ public class Vehiculo extends SingleAgent{
         }
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     public void actuar() throws JSONException, InterruptedException{
         if(recepcion.has("repostaje")){
             recepcion_plano = recepcion.getString("repostaje");

@@ -8,7 +8,6 @@ package practica;
 import es.upv.dsic.gti_ia.core.ACLMessage;
 import es.upv.dsic.gti_ia.core.AgentID;
 import es.upv.dsic.gti_ia.core.SingleAgent;
-import static java.lang.Integer.parseInt;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +17,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
- * @author alex
+ * @author Alejandro
  */
 public class Reconocimiento extends SingleAgent{
     
@@ -39,6 +38,11 @@ public class Reconocimiento extends SingleAgent{
     //public String movimiento;
     Random r;
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public Reconocimiento(AgentID aid) throws Exception {
         super(aid);
         
@@ -57,6 +61,11 @@ public class Reconocimiento extends SingleAgent{
         }
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void actualizar_GPS() throws JSONException{
         recepcion = recepcion.getJSONObject("gps"); 
         posicion_x = recepcion.getInt("x");
@@ -64,6 +73,12 @@ public class Reconocimiento extends SingleAgent{
         System.out.println("Reconocimiento: actualizo gps: x: " + posicion_x + " y: " + posicion_y);
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    * @author Alvaro
+    */
     public void actualizar_Radar() throws JSONException{
         JSONArray rad = recepcion.getJSONArray("radar");
         for(int i = 0; i < rad.length(); i+=5)
@@ -76,6 +91,12 @@ public class Reconocimiento extends SingleAgent{
                 System.out.print(radar[i][j] + ", ");
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    * @author Alvaro
+    */
     public void actualizar_Scanner() throws JSONException{
         JSONArray scan = recepcion.getJSONArray("scanner");
         for(int i = 0; i < scan.length(); i+=5)
@@ -88,6 +109,11 @@ public class Reconocimiento extends SingleAgent{
                 System.out.print(scanner[i][j] + ", ");
     }
     
+    
+    /**
+    *
+    * @author Alvaro
+    */
     public void actualizarMatrizAuxiliar(){
         for(int i = 0; i < 5; i++)
             for(int j = 0; j < 5; j++){
@@ -101,6 +127,11 @@ public class Reconocimiento extends SingleAgent{
         camino_recorrido[1000/2 + posicion_y][1000/2 + posicion_x] = pasos;
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void enviar_mensaje(String mensaje, String receptor){
         outbox = new ACLMessage();
         outbox.setSender(getAid());
@@ -109,6 +140,11 @@ public class Reconocimiento extends SingleAgent{
         this.send(outbox);
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         if(!inbox.getContent().equals("\"CRASHED\"")){
@@ -125,6 +161,10 @@ public class Reconocimiento extends SingleAgent{
             finalizar = true;
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void execute(){
         int contador = 0;
@@ -140,6 +180,11 @@ public class Reconocimiento extends SingleAgent{
             }
         }
     }
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void finalize(){
         try {
@@ -149,6 +194,10 @@ public class Reconocimiento extends SingleAgent{
         }
     }
     
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void init(){
         System.out.println("Reconocimiento: vivo");
@@ -156,12 +205,11 @@ public class Reconocimiento extends SingleAgent{
     
     
     /**
- *
- * @author alvaro
- * @author sergio
- * @author joaquin
- * @author salome
- */
+     *
+     * @author Alvaro
+     * @author Alejandro (poco)
+     * @author Joaquin (solo lo del mapa inaccesible)
+    */
     public void actuar() throws JSONException{
         
         if(visto){
@@ -179,7 +227,7 @@ public class Reconocimiento extends SingleAgent{
                 System.out.println("Reconocimiento Actuar: objetivo encontrado con exito");
                 enviar_mensaje(envio.toString(),"vehiculo14");
                 finalizar = true;
-            }else if(pasos_inaccesible>1000){
+            }else if(pasos_inaccesible>1000){ //Probar
                 envio = new JSONObject();
                 envio.put("pensamiento","inaccesible");
                 System.out.println("Reconocimiento Actuar: objetivo no puede ser encontrado");

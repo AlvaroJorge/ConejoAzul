@@ -15,7 +15,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
- * @author alex
+ * @author Alejandro
  */
 public class Repostaje extends SingleAgent{
     
@@ -26,6 +26,11 @@ public class Repostaje extends SingleAgent{
     private String recepcion_plano;
     private boolean finalizar;
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public Repostaje(AgentID aid) throws Exception {
         super(aid);
         outbox = null;
@@ -33,6 +38,11 @@ public class Repostaje extends SingleAgent{
         finalizar = false;
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void enviar_mensaje(String mensaje, String receptor){
         outbox = new ACLMessage();
         outbox.setSender(getAid());
@@ -41,6 +51,11 @@ public class Repostaje extends SingleAgent{
         this.send(outbox);
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void recibir_mensaje() throws InterruptedException, JSONException{
         inbox = receiveACLMessage();
         if(!inbox.getContent().equals("\"CRASHED\"")){
@@ -51,6 +66,11 @@ public class Repostaje extends SingleAgent{
             finalizar = true;
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void execute(){
         while(!finalizar){
@@ -63,6 +83,11 @@ public class Repostaje extends SingleAgent{
         }
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void finalize(){
         try {
@@ -72,11 +97,21 @@ public class Repostaje extends SingleAgent{
         }
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     @Override
     public void init(){
         System.out.println("Repostaje: vivo");
     }
     
+    
+    /**
+    *
+    * @author Alejandro
+    */
     public void actuar() throws JSONException{
         
         if(recepcion.has("vehiculo")){
